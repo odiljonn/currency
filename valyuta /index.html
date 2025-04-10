@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="container">
+      <h2>valuta konvertori</h2>
+      <input type="number" id="amount" placeholder="miqdorini kiritng" />
+
+      <select id="valuta1">
+        <option value="USD">USD - AQSH dollari</option>
+        <option value="EUR">EUR - YEVRO</option>
+        <option value="UZS">UZS - SOM</option>
+      </select>
+
+      <select id="valuta2">
+        <option value="UZS">UZS - SOM</option>
+        <option value="USD">USD - AQSH dollari</option>
+        <option value="EUR">EUR - YEVRO</option>
+      </select>
+
+      <button onclick="convertCurrency()">Konvertatsiya qilish</button>
+
+      <h3 id="result"></h3>
+    </div>
+
+    <script>
+      async function convertCurrency() {
+        let amount = document.getElementById("amount").value;
+        let valuta1 = document.getElementById("valuta1").value;
+        let valuta2 = document.getElementById("valuta2").value;
+
+        if (!amount || amount <= 0) {
+          alert("Iltimos, miqdorni to'g'ri kiriting");
+          return;
+        }
+
+        let apiKey = "2b4ab6cb0e-3437d608ab-su12i1";
+        let url = `https://api.fastforex.io/convert?from=${valuta1}&to=${valuta2}&amount=${amount}&api_key=${apiKey}`;
+
+        try {
+          let response = await fetch(url);
+          if (!response.ok) {
+            throw new Error("API so'rovida xatolik yuz berd");
+          }
+
+          let data = await response.json();
+
+          if (!data || !data.result) {
+            throw new Error("Konvertatsiya qilishda xatolik yuz berdi");
+          }
+
+          let convertedAmount = data.result[valuta1];
+
+          document.getElementById(
+            "result"
+          ).textContent = `${amount} ${valuta1} = ${convertedAmount} ${valuta2}`;
+        } catch (error) {
+          console.error("Xatolik:", error);
+          alert(`Xatolik yuz berdi: ${error.message}`);
+        }
+      }
+    </script>
+  </body>
+</html>

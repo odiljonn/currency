@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Pomdoro timer</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <h1>pomdoro timer</h1>
+    <div id="timer">25:00</div>
+    <button id="startbtn">start</button>
+    <button id="resetbtn">reset</button>
+
+    <script>
+      let timer;
+      let minutes = 25;
+      let secunds = 0;
+      let isrunning = false;
+
+      document
+        .getElementById("startbtn")
+        .addEventListener("click", function () {
+          if (isrunning) {
+            clearInterval(timer);
+            isrunning = false;
+            this.textContent = "start";
+          } else {
+            timer = setInterval(vaqtTimer, 1000);
+            isrunning = true;
+            this.textContent = "pause";
+          }
+        });
+
+      document
+        .getElementById("resetbtn")
+        .addEventListener("click", function () {
+          clearInterval(timer);
+          minutes = 25;
+          secunds = 0;
+          document.getElementById("timer").textContent = formatTime(
+            minutes,
+            secunds
+          );
+          isrunning = false;
+          document.getElementById("startbtn").textContent = "start";
+        });
+
+      function vaqtTimer() {
+        if (secunds === 0) {
+          if (minutes === 0) {
+            clearInterval(timer);
+            alert("hi odiljon");
+            minutes = 25;
+            secunds = 0;
+            document.getElementById("timer").textContent = formatTime(
+              minutes,
+              secunds
+            );
+            isrunning = false;
+            document.getElementById("startbtn").textContent = "start";
+          } else {
+            minutes--;
+            secunds = 59;
+          }
+        } else {
+          secunds--;
+        }
+        document.getElementById("timer").textContent = formatTime(
+          minutes,
+          secunds
+        );
+      }
+
+      function formatTime(minutes, secunds) {
+        if (secunds < 10) {
+          secunds = "0" + secunds;
+        }
+        return minutes + ":" + secunds;
+      }
+    </script>
+  </body>
+</html>
